@@ -6,20 +6,20 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject centroDaTela;
-    public GameObject letra;
-    public GameObject indicadorDeTentativas;
+    public GameObject centroDaTela; //Determina o centro da tela
+    public GameObject letra; //Usado para mostrar as letras da palavra escolhida
+    public GameObject indicadorDeTentativas; //Indica a quantidade de tentativas que faltam
 
-    private string palavraSorteada;
-    private int tamanhoPalavra;
-    private char[] letrasPalavraSorteada;
-    private bool[] gabaritoPalavraSorteada;
+    private string palavraSorteada; //Palavra escolhida entre as que estão no arquivo txt
+    private int tamanhoPalavra; //Tamanho da palavra escolhida
+    private char[] letrasPalavraSorteada; //Vetor com as letras da palavra escolhida
+    private bool[] gabaritoPalavraSorteada; //Indica as posições que foram descobertas ou não
 
-    private char[] letrasUsadas;
+    private char[] letrasUsadas; //Indica quais letras já foram usadas pelo jogador
 
-    private int numChances;
+    private int numChances; //Quantidade de chances faltantes
 
-    // Start is called before the first frame update
+    // Método chamado quando o Objeto é iniciado
     void Start()
     {
         SortearPalavra();
@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
         GameObject.Find("indicadorDeTentativas").GetComponent<Text>().text = ("Tentativas restantes: " + numChances);
     }
 
-    // Update is called once per frame
+    // Método chamado a cada frame
     void Update()
     {
         VerificarInput();
@@ -99,6 +99,7 @@ public class GameManager : MonoBehaviour
         if (!LetraJaUsada(letraTeclada))
         {
             int i = 0;
+            // obs: o vetor é criado com todos elementos iguais ao char de valor 0
             while(letrasUsadas[i] != 0 && i<26)
             {
                 i++;
@@ -137,7 +138,6 @@ public class GameManager : MonoBehaviour
         FindObjectOfType<AudioManager>().Stop("Theme");
         if (resultado)
         {
-            
             FindObjectOfType<AudioManager>().Play("Victory");
             SceneManager.LoadScene("TelaDeSucesso");
         }
@@ -185,20 +185,19 @@ public class GameManager : MonoBehaviour
                                 acertos++;
                             }
                         }
+                        //indica um acerto e não há redução no número de chances
+                        if (acertos > 0)
+                        {
+                            FindObjectOfType<AudioManager>().Play("Beep");
+                        }
                     }
 
-                    //indica erro e a perca de uma chance
+                    //indica um erro e há a perca de uma chance
                     if(acertos == 0)
                     {
                         numChances--;
                         GameObject.Find("indicadorDeTentativas").GetComponent<Text>().text = ("Tentativas restantes: " + numChances);
                         FindObjectOfType<AudioManager>().Play("Error");
-                    }
-
-                    //indica um acerto e não há redução no número de chances
-                    else
-                    {
-                        FindObjectOfType<AudioManager>().Play("Beep");
                     }
 
                     if (VerificarGabarito())

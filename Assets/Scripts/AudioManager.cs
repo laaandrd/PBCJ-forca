@@ -43,6 +43,7 @@ public class AudioManager : MonoBehaviour
     {
         Sound s = Array.Find(sounds, sound => sound.name == name);
         
+        // Mensagem de aviso caso o audio não seja encontrado
         if(s == null)
         {
             Debug.LogWarning("Sound: " + name + " not found!");
@@ -56,7 +57,8 @@ public class AudioManager : MonoBehaviour
     public void Stop(string name)
     {
         Sound s = Array.Find(sounds, sound => sound.name == name);
-
+        
+        // Mensagem de aviso caso o audio não seja encontrado
         if (s == null)
         {
             Debug.LogWarning("Sound: " + name + " not found!");
